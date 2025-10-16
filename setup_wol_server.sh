@@ -76,7 +76,13 @@ def get_stats():
     disk = psutil.disk_usage('/').percent
     with open('/proc/uptime') as f:
         uptime_seconds = float(f.readline().split()[0])
-    uptime = time.strftime("%Hh %Mm %Ss", time.gmtime(uptime_seconds))
+
+    days = int(uptime_seconds // 86400)
+    hours = int((uptime_seconds % 86400) // 3600)
+    minutes = int((uptime_seconds % 3600) // 60)
+    seconds = int(uptime_seconds % 60)
+    uptime = f"{days}d {hours}h {minutes}m {seconds}s"
+
     try:
         with open('/sys/class/thermal/thermal_zone0/temp') as f:
             temp = int(f.readline()) / 1000
